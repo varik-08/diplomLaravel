@@ -63,7 +63,10 @@ class UserController extends Controller
         $countProduct = $order->products()->where('product_id', $product->id)->value('count');
         if ($countProduct == 1) {
             $order->products()->detach($product);
-            session()->forget('orderNumber');
+            if($order->products()->count() == 0)
+            {
+                session()->forget('orderNumber');
+            }
         } else {
             $order->products()->updateExistingPivot($product, ['count' => --$countProduct]);
         }
@@ -76,8 +79,8 @@ class UserController extends Controller
     {
         $order = Order::find(session()->get('orderNumber'));
         $order->update([
-            'nameEmployee' => $request->get('name'),
-            'phoneEmployee' => $request->get('phone'),
+            'name' => $request->get('name'),
+            'phone' => $request->get('phone'),
             'status' => '1',
         ]);
         session()->forget('orderNumber');

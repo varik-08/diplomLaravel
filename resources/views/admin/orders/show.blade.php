@@ -4,8 +4,8 @@
 	<div class="justify-content-center">
 		<div class="panel">
 			<h1>Заказ №{{ $order->id }}</h1>
-			<p>Заказчик: <b>{{ $order->nameEmployee }}</b></p>
-			<p>Номер теелфона: <b>{{ $order->phoneEmployee }}</b></p>
+			<p>Заказчик: <b>{{ $order->name }}</b></p>
+			<p>Номер теелфона: <b>{{ $order->phone }}</b></p>
 			<table class="table table-striped">
 				<thead>
 				<tr>

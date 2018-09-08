@@ -41,15 +41,10 @@ class ProductController extends Controller
      */
     public function store(postCreateProduct $request)
     {
-        Product::create([
-            'code' => $request->get('code'),
-            'name' => $request->get('name'),
-            'category_id' => $request->get('category_id'),
-            'description' => $request->get('description'),
-            'image' => 'product/' . $request->file('image')->hashName(),
-            'price' => $request->get('price'),
-        ]);
-        $request->file('image')->store('product/', 'public');
+        $product = $request->all();
+        $product['image'] = $request->file('image')->store('product', 'public');
+
+        Product::create($product);
         session()->flash('success', 'Товар ' . $request->get('name') . ' сохранен');
         return redirect(route('admin.products.index'));
     }
@@ -86,28 +81,18 @@ class ProductController extends Controller
      */
     public function update(postUpdateProduct $request, Product $product)
     {
+        $productTotal = $request->all();
+
         if ($request->hasFile('image')) {
-            Product::where('id', $product->id)
-                ->update([
-                    'code' => $request->get('code'),
-                    'name' => $request->get('name'),
-                    'category_id' => $request->get('category_id'),
-                    'description' => $request->get('description'),
-                    'image' => 'product/' . $request->file('image')->hashName(),
-                    'price' => $request->get('price'),
-                ]);
-            Storage::disk('public')->delete($product->image);
-            $request->file('image')->store('product/', 'public');
+            $product->deletePhoto();
+            $productTotal['image'] = $request->file('image')->store('product', 'public');
+            Product::find($product->id)
+                ->update($productTotal);
         } else {
-            Product::where('id', $product->id)
-                ->update([
-                    'code' => $request->get('code'),
-                    'name' => $request->get('name'),
-                    'category_id' => $request->get('category_id'),
-                    'description' => $request->get('description'),
-                    'price' => $request->get('price'),
-                ]);
+            Product::find($product->id)
+                ->update($productTotal);
         }
+
         session()->flash('success', 'Товар ' . $request->get('name') . ' сохранен');
         return redirect(route('admin.products.index'));
     }
@@ -120,8 +105,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Storage::disk('public')->delete($product->image);
-        $product->delete();
+        $product->deleteProduct();
         session()->flash('warning', 'Товар ' . $product->name . ' удален');
         return redirect()->back();
     }

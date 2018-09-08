@@ -29,8 +29,8 @@
 				@foreach($orders as $order)
 					<tr>
 						<td>{{ $order->id }}</td>
-						<td>{{ $order->nameEmployee }}</td>
-						<td>{{ $order->phoneEmployee }}</td>
+						<td>{{ $order->name }}</td>
+						<td>{{ $order->phone }}</td>
 						<td>{{ $order->updated_at->format('Y.m.d H:i:s') }}</td>
 						<td>{{ $order->fullPriceText() }}</td>
 						<td>

@@ -15,17 +15,19 @@
 Auth::routes();
 
 Route::group([
+    'prefix' => 'admin',
     'as' => 'admin.',
     'middleware' => 'auth',
 ], function () {
-    Route::resource('admin/categories', 'CategoryController');
-    Route::resource('admin/products', 'ProductController');
+    Route::resource('categories', 'CategoryController');
+    Route::resource('products', 'ProductController');
 
     Route::group([
         'as' => 'orders.',
+        'namespace' => 'Admin',
     ], function () {
-        Route::get('admin/orders', 'AdminController@orders')->name('index');
-        Route::get('admin/ordersShow/{order}', 'AdminController@ordersShow')->name('show');
+        Route::get('orders', 'AdminController@orders')->name('index');
+        Route::get('ordersShow/{order}', 'AdminController@ordersShow')->name('show');
     });
 });
 

@@ -7,7 +7,6 @@ use App\Http\Requests\postCreateCategory;
 use App\Http\Requests\postUpdateCategory;
 use App\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -40,13 +39,10 @@ class CategoryController extends Controller
      */
     public function store(postCreateCategory $request)
     {
-        Category::create([
-            'code' => $request->get('code'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'image' => 'category/' . $request->file('image')->hashName(),
-        ]);
-        $request->file('image')->store('category/', 'public');
+        $category = $request->all();
+        $category['image'] = $request->file('image')->store('category', 'public');
+
+        Category::create($category);
         session()->flash('success', 'Категория ' . $request->get('name') . ' сохранена');
         return redirect(route('admin.categories.index'));
     }
@@ -82,24 +78,18 @@ class CategoryController extends Controller
      */
     public function update(postUpdateCategory $request, Category $category)
     {
+        $categoryTotal = $request->all();
+
         if ($request->hasFile('image')) {
-            Category::where('id', $category->id)
-                ->update([
-                    'code' => $request->get('code'),
-                    'name' => $request->get('name'),
-                    'description' => $request->get('description'),
-                    'image' => 'category/' . $request->file('image')->hashName(),
-                ]);
-            Storage::disk('public')->delete($category->image);
-            $request->file('image')->store('category/', 'public');
+            $category->deletePhoto();
+            $categoryTotal['image'] = $request->file('image')->store('category', 'public');
+            Category::find($category->id)
+                ->update($categoryTotal);
         } else {
-            Category::where('id', $category->id)
-                ->update([
-                    'code' => $request->get('code'),
-                    'name' => $request->get('name'),
-                    'description' => $request->get('description'),
-                ]);
+            Category::find($category->id)
+                ->update($categoryTotal);
         }
+
         session()->flash('success', 'Категория ' . $request->get('name') . ' сохранена');
         return redirect(route('admin.categories.index'));
     }
@@ -112,14 +102,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $products = Product::where('category_id', $category->id)->get();
-        foreach ($products as $product)
-        {
-            Storage::disk('public')->delete($product->image);
-            $product->delete();
-        }
-        Storage::disk('public')->delete($category->image);
-        $category->delete();
+        $category->deleteCategory();
         session()->flash('warning', 'Категория ' . $category->name . ' удалена');
         return redirect()->back();
     }

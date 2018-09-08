@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Category;
 use App\Order;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -28,5 +29,16 @@ class Product extends Model
     public function priceForCount($count)
     {
         return $this->price * $count . ' руб.';
+    }
+
+    public function deletePhoto()
+    {
+        Storage::disk('public')->delete($this->image);
+    }
+
+    public function deleteProduct()
+    {
+        $this->deletePhoto();
+        $this->delete();
     }
 }
