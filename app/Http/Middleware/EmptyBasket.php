@@ -18,7 +18,7 @@ class EmptyBasket
         if(!session()->has('orderNumber'))
         {
             session()->flash('success', 'Ваша корзина пуста!');
-            return redirect()->route('index');
+            return redirect()->back();
         }
         return $next($request);
     }

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Requests\postCreateCategory;
 use App\Http\Requests\postUpdateCategory;
-use App\Product;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
@@ -83,13 +82,9 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $category->deletePhoto();
             $categoryTotal['image'] = $request->file('image')->store('category', 'public');
-            Category::find($category->id)
-                ->update($categoryTotal);
-        } else {
-            Category::find($category->id)
-                ->update($categoryTotal);
         }
-
+        Category::find($category->id)
+            ->update($categoryTotal);
         session()->flash('success', 'Категория ' . $request->get('name') . ' сохранена');
         return redirect(route('admin.categories.index'));
     }
@@ -105,11 +100,5 @@ class CategoryController extends Controller
         $category->deleteCategory();
         session()->flash('warning', 'Категория ' . $category->name . ' удалена');
         return redirect()->back();
-    }
-
-    public function category($codeCategory)
-    {
-        $category = Category::where('code', $codeCategory)->first();
-        return view('category', compact(['category']));
     }
 }

@@ -12,18 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $products = Product::all();
-        return view('products', compact(['products']));
-    }
-
-    public function categories()
-    {
-        $categories = Category::all();
-        return view('categories', compact(['categories']));
-    }
-
     public function basketAdd(Product $product)
     {
         if (session()->has('orderNumber')) {

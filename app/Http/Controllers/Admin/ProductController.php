@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Requests\postCreateProduct;
 use App\Http\Requests\postUpdateProduct;
+use App\Http\Controllers\Controller;
 use App\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -86,12 +85,9 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $product->deletePhoto();
             $productTotal['image'] = $request->file('image')->store('product', 'public');
-            Product::find($product->id)
-                ->update($productTotal);
-        } else {
-            Product::find($product->id)
-                ->update($productTotal);
         }
+        Product::find($product->id)
+            ->update($productTotal);
 
         session()->flash('success', 'Товар ' . $request->get('name') . ' сохранен');
         return redirect(route('admin.products.index'));
@@ -108,13 +104,5 @@ class ProductController extends Controller
         $product->deleteProduct();
         session()->flash('warning', 'Товар ' . $product->name . ' удален');
         return redirect()->back();
-    }
-
-    public function product($codeCategory, $codeProduct)
-    {
-        $idCategory = Category::where('code', $codeCategory)->value('id');
-        $product = Product::where('code',$codeProduct)
-            ->where('category_id',$idCategory)->first();
-        return view('product',compact(['product']));
     }
 }

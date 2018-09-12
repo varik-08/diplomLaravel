@@ -18,16 +18,17 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
     'middleware' => 'auth',
+    'namespace' => 'Admin',
 ], function () {
+
     Route::resource('categories', 'CategoryController');
     Route::resource('products', 'ProductController');
 
     Route::group([
         'as' => 'orders.',
-        'namespace' => 'Admin',
     ], function () {
-        Route::get('orders', 'AdminController@orders')->name('index');
-        Route::get('ordersShow/{order}', 'AdminController@ordersShow')->name('show');
+        Route::get('orders', 'OrderController@orders')->name('index');
+        Route::get('ordersShow/{order}', 'OrderController@ordersShow')->name('show');
     });
 });
 
@@ -46,11 +47,13 @@ Route::group([
     });
 });
 
+
 Route::get('reset', 'UserController@reset')->name('reset');
-Route::get('/', 'UserController@index')->name('index');
-Route::get('categories', 'UserController@categories')->name('categories');
-Route::get('{codeCategory}/{codeProduct}', 'ProductController@product')->name('product');
-Route::get('{codeCategory}', 'CategoryController@category')->name('category');
+Route::get('/', 'FaceController@productShowUser')->name('index');
+Route::get('categories', 'FaceController@categoryShowUser')->name('categories');
+Route::get('{codeCategory}/{codeProduct}', 'FaceController@product')->name('product');
+Route::get('{codeCategory}', 'FaceController@category')->name('category');
+
 
 
 
