@@ -29,7 +29,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.form', compact(['categories']));
+        return view('admin.products.form', compact('categories'));
     }
 
     /**
@@ -101,7 +101,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->deleteProduct();
+        $product->delete();
         session()->flash('warning', 'Товар ' . $product->name . ' удален');
         return redirect()->back();
     }

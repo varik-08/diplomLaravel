@@ -36,9 +36,9 @@ class Product extends Model
         Storage::disk('public')->delete($this->image);
     }
 
-    public function deleteProduct()
+    public function delete()
     {
         $this->deletePhoto();
-        $this->delete();
+        parent::delete();
     }
 }

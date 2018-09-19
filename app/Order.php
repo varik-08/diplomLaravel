@@ -33,4 +33,9 @@ class Order extends Model
         }
         return $totalAmount;
     }
+
+    public function scopeTheConfirmation($query)
+    {
+        return $query->where('status', 1);
+    }
 }

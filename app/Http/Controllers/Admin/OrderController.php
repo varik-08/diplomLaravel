@@ -10,12 +10,12 @@ class OrderController extends Controller
 {
     public function orders()
     {
-        $orders = Order::where('status', 1)->get();
+        $orders = Order::theConfirmation()->get();
         return view('admin.orders.index', compact('orders'));
     }
 
     public function ordersShow(Order $order)
     {
-        return view('admin.orders.show', compact(['order']));
+        return view('admin.orders.show', compact('order'));
     }
 }

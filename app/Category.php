@@ -21,7 +21,6 @@ class Category extends Model
         $products = Product::where('category_id', $this->id)->get();
         foreach ($products as $product)
         {
-            $product->deletePhoto();
             $product->delete();
         }
     }
@@ -31,10 +30,10 @@ class Category extends Model
         Storage::disk('public')->delete($this->image);
     }
 
-    public function deleteCategory()
+    public function delete()
     {
         $this->deleteProducts();
         $this->deletePhoto();
-        $this->delete();
+        parent::delete();
     }
 }

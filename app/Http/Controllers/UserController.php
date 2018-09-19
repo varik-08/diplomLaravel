@@ -35,13 +35,13 @@ class UserController extends Controller
     public function basketShow()
     {
         $order = Order::find(session()->get('orderNumber'));
-        return view('basket', compact(['order']));
+        return view('basket', compact('order'));
     }
 
     public function basketPlace()
     {
         $order = Order::find(session()->get('orderNumber'));
-        return view('order', compact(['order']));
+        return view('order', compact('order'));
     }
 
     public function basketRemove(Product $product)

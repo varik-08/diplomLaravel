@@ -97,7 +97,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->deleteCategory();
+        $category->delete();
         session()->flash('warning', 'Категория ' . $category->name . ' удалена');
         return redirect()->back();
     }

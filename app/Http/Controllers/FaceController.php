@@ -10,27 +10,26 @@ class FaceController extends Controller
 {
     public function category($codeCategory)
     {
-        $category = Category::where('code', $codeCategory)->first();
-        return view('category', compact(['category']));
+        $category = Category::where('code', $codeCategory)->firstOrFail();
+        return view('category', compact('category'));
     }
 
     public function product($codeCategory, $codeProduct)
     {
         $idCategory = Category::where('code', $codeCategory)->value('id');
-        $product = Product::where('code', $codeProduct)
-            ->where('category_id', $idCategory)->first();
-        return view('product', compact(['product']));
+        $product = Product::where('category_id', $idCategory)->where('code', $codeProduct)->firstOrFail();
+        return view('product', compact('product'));
     }
 
     public function productShowUser()
     {
         $products = Product::all();
-        return view('products', compact(['products']));
+        return view('products', compact('products'));
     }
 
     public function categoryShowUser()
     {
         $categories = Category::all();
-        return view('categories', compact(['categories']));
+        return view('categories', compact('categories'));
     }
 }
