@@ -16,8 +16,7 @@ class FaceController extends Controller
 
     public function product($codeCategory, $codeProduct)
     {
-        $idCategory = Category::where('code', $codeCategory)->value('id');
-        $product = Product::where('category_id', $idCategory)->where('code', $codeProduct)->firstOrFail();
+        $product = Category::where('code', $codeCategory)->firstOrFail()->products()->where('code', $codeProduct)->firstOrFail();
         return view('product', compact('product'));
     }
 

@@ -18,11 +18,7 @@ class Category extends Model
 
     public function deleteProducts()
     {
-        $products = Product::where('category_id', $this->id)->get();
-        foreach ($products as $product)
-        {
-            $product->delete();
-        }
+        Category::find($this->id)->products()->get()->each->delete();
     }
 
     public function deletePhoto()
