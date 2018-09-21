@@ -3,9 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
-use App\Product;
 use Illuminate\Support\Facades\Storage;
+
 
 class Category extends Model
 {
@@ -18,7 +17,7 @@ class Category extends Model
 
     public function deleteProducts()
     {
-        Category::find($this->id)->products()->get()->each->delete();
+        $this->products->map->delete();
     }
 
     public function deletePhoto()
